@@ -50,10 +50,48 @@ router.route('/user')
     })
   })
 
-  //get by params
-  router.route('/user/:username')
-  .get(function(req,res){
+//get by params
+router.route('/user/:username')
+  .get(function (req, res) {
     User.findOne({
-      
+      username: req.params.username
+    }, function (err, user) {
+      if (err) res.send(err)
+      else res.json(user)
     })
   })
+
+  .put(function (req, res) {
+    User.findOne({
+      username: req.params.username
+    }, function (err, user) {
+      if (err) res.send(err)
+      else {
+        user.username = req.body.username
+        user.password = req.body.password
+        user.name = req.body.name
+        user.email = req.body.email
+        user.save(function (err) {
+          if (err) res.send(err)
+          else res.json({
+            message: 'user updated'
+          })
+        })
+      }
+    })
+  })
+
+  .delete(function (req, res) {
+    User.remove({
+      username: req.params.username
+    }, function (err, user) {
+      if (err) res.send(err)
+      else res.json({
+        message: 'user deleted'
+      })
+    })
+  })
+
+app.use('/api', router)
+app.listen(port)
+console.log('services started at port = ' + port)
