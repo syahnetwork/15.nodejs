@@ -42,10 +42,11 @@ exports.view = function (req, res) {
   Siswa.findById(req.params.siswa_id, function (err, siswa) {
     if (err)
       res.send(err);
-    res.json({
-      message: "Siswa Details Loading...",
-      data: siswa
-    });
+    else //need if else because sending response twice, can cause server to crash
+      res.json({
+        message: "Siswa Details Loading...",
+        data: siswa
+      });
   });
 };
 
@@ -78,9 +79,10 @@ exports.delete = function (req, res) {
   }, function (err, siswa) {
     if (err)
       res.send(err);
-    res.json({
-      status: "success",
-      message: "Student Deleted!"
-    });
+    else
+      res.json({
+        status: "success",
+        message: "Student Deleted!"
+      });
   });
 };
